@@ -4,7 +4,7 @@
     <base-card>
       <div class='controls'>
         <base-button mode='outline'>Refresh</base-button>
-        <base-button link to='/register'>Register as a Coach</base-button>
+        <base-button link to='/register' v-if='!isCoach'>Register as a Coach</base-button>
       </div>
       <ul v-if='hasCoaches'>
         <coach-item
@@ -47,7 +47,7 @@ export default {
 
       });
     },
-    ...mapGetters('coachesModule', { hasCoaches: 'hasCoaches', allCoaches: 'coaches' })
+    ...mapGetters('coachesModule', { hasCoaches: 'hasCoaches', allCoaches: 'coaches', isCoach: 'isCoach' })
   },
   data() {
     return {
