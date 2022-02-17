@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section>FILTER</section>
+    <coach-filter @change-filter='setFilters'></coach-filter>
     <base-card>
       <div class='controls'>
         <base-button mode='outline'>Refresh</base-button>
@@ -25,13 +25,43 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import CoachItem from '@/components/coaches/CoachItem';
+import CoachItem from '../../components/coaches/CoachItem';
+import CoachFilter from '../../components/coaches/CoachFilter';
+
 
 export default {
   name: 'Coaches',
-  components: { CoachItem },
+  components: { CoachItem, CoachFilter },
   computed: {
-    ...mapGetters('coachesModule', { hasCoaches: 'hasCoaches', filteredCoaches: 'coaches' })
+    filteredCoaches() {
+      const coaches = this.allCoaches;
+      return coaches.filter(coach => {
+        console.log(coach);
+        if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
+          return true;
+        }
+        if (this.activeFilters.backend && coach.areas.includes('backend')) {
+          return true;
+        }
+        return this.activeFilters.career && coach.areas.includes('career');
+
+      });
+    },
+    ...mapGetters('coachesModule', { hasCoaches: 'hasCoaches', allCoaches: 'coaches' })
+  },
+  data() {
+    return {
+      activeFilters: {
+        frontend: true,
+        backend: true,
+        career: true
+      }
+    };
+  },
+  methods: {
+    setFilters(updatedFilters) {
+      this.activeFilters = updatedFilters;
+    }
   }
 };
 </script>
