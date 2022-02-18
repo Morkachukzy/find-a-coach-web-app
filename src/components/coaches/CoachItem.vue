@@ -6,7 +6,7 @@
       <base-badge v-for='area in areas' :key='area' :type='area' :title='area'></base-badge>
     </div>
     <div class='actions'>
-      <base-button mode='outline' :to='coachContactLink'>Contact</base-button>
+      <base-button mode='outline' :to='coachContactLink' link>Contact</base-button>
       <base-button :to='coachDetailsLink' link>View Details</base-button>
     </div>
   </base-card>
