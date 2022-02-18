@@ -15,6 +15,7 @@ export default {
   name: 'CoachRegistration',
   components: { CoachForm },
   methods: {
+
     saveData(data) {
       this.registerCoach(data);
       console.log("Register");
