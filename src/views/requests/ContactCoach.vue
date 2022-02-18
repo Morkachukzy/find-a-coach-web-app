@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: 'ContactCoach',
+  props: ['id'],
   data() {
     return {
       email: '',
@@ -32,8 +35,10 @@ export default {
         this.formIsValid = false;
         return;
       }
-
-    }
+      this.contactCoach({email: this.email, message: this.message, coachId: this.id});
+      this.$router.replace('/coaches');
+    },
+    ...mapActions('requestsModule', {contactCoach: 'contactCoach'}),
   },
 };
 </script>

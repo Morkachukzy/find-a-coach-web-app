@@ -3,11 +3,13 @@ import mutations from './mutations';
 import getters from './getters';
 
 export default {
-  namespaced: true,
-  state() {
-
-  },
-  actions,
-  mutations,
-  getters
+    namespaced: true,
+    state() {
+      return{
+        requests: []
+      }
+    },
+    actions,
+    mutations,
+    getters
 }
