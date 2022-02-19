@@ -21,21 +21,26 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
+.route-enter-from{
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.route-leave-to{
+  opacity: 0;
+  transform: translateY(30px);
+}
 .route-enter-active {
-  animation: fade .2s ease;
+  transition: all .2s ease-out;
 }
 
 .route-leave-active {
-  animation: fade .2s ease reverse;
+  transition: all .2s ease-in;
+}
+.route-enter-to,
+.route-leave-from{
+  opacity: 1;
+  transform: translateY(0);
 }
 
 

@@ -63,7 +63,7 @@ export default {
 @keyframes pop-up {
   0% {
     opacity: 0;
-    transform: scale(0);
+    transform: scale(0.5);
   }
   90% {
     transform: scale(1.1);

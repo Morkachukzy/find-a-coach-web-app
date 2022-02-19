@@ -7,7 +7,7 @@
     <coach-filter @change-filter='setFilters'></coach-filter>
     <base-card>
       <div class='controls'>
-        <base-button mode='outline' @click="loadCoaches">Refresh</base-button>
+        <base-button mode='outline' @click="loadCoaches(true)">Refresh</base-button>
         <base-button link to='/register' v-if='!isCoach && !isLoading'>Register as a Coach</base-button>
       </div>
       <div v-if="isLoading">
@@ -72,10 +72,10 @@ export default {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       this.isLoading = true;
       try {
-        await this.coaches();
+        await this.coaches({forceRefresh: refresh});
       } catch (e) {
         this.error = e.message || 'Something went wrong';
       }

@@ -1,6 +1,8 @@
 <template>
-
   <section>
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
     <base-card>
       <header>
         <h2 >Requests Received</h2>
@@ -30,7 +32,7 @@ export default {
   computed: {
     ...mapGetters('requestsModule', {receivedRequests: 'requests', hasRequests: 'hasRequests'})
   },
-  method: {
+  methods: {
     async loadRequests() {
       this.handleError();
       this.isLoading = true;
