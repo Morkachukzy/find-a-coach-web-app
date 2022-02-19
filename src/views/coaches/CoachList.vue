@@ -1,5 +1,9 @@
 <template>
   <div>
+      <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+        <p>{{ error }}</p>
+      </base-dialog>
+
     <coach-filter @change-filter='setFilters'></coach-filter>
     <base-card>
       <div class='controls'>
@@ -56,6 +60,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      error: null,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -69,8 +74,15 @@ export default {
     },
     async loadCoaches() {
       this.isLoading = true;
-      await this.coaches();
+      try {
+        await this.coaches();
+      } catch (e) {
+        this.error = e.message || 'Something went wrong';
+      }
       this.isLoading = false;
+    },
+    handleError() {
+      this.error = null;
     },
     ...mapActions('coachesModule', {coaches: 'loadCoaches'}),
   },
@@ -91,4 +103,6 @@ ul {
   display: flex;
   justify-content: space-between;
 }
+
+
 </style>
