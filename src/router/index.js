@@ -14,6 +14,8 @@ const router = createRouter({
     }, {
         path: '/requests', component: () => import('@/views/requests/RequestsReceived')
     }, {
+        path: '/auth', component: () => import('@/views/auth/UserAuth')
+    }, {
         path: '/:notFound(.*)', component: () => import('@/views/notFound')
     }]
 });
