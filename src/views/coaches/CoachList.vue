@@ -3,18 +3,18 @@
     <coach-filter @change-filter='setFilters'></coach-filter>
     <base-card>
       <div class='controls'>
-        <base-button mode='outline'>Refresh</base-button>
+        <base-button mode='outline' @click="loadCoaches">Refresh</base-button>
         <base-button link to='/register' v-if='!isCoach'>Register as a Coach</base-button>
       </div>
       <ul v-if='hasCoaches'>
         <coach-item
-          v-for='coach in filteredCoaches'
-          :key='coach.id'
-          :id='coach.id'
-          :firstName='coach.firstName'
-          :lastName='coach.lastName'
-          :rate='coach.hourlyRate'
-          :areas='coach.areas'
+            v-for='coach in filteredCoaches'
+            :key='coach.id'
+            :id='coach.id'
+            :firstName='coach.firstName'
+            :lastName='coach.lastName'
+            :rate='coach.hourlyRate'
+            :areas='coach.areas'
         >
         </coach-item>
       </ul>
@@ -24,14 +24,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import {mapGetters, mapActions } from 'vuex';
 import CoachItem from '../../components/coaches/CoachItem';
 import CoachFilter from '../../components/coaches/CoachFilter';
 
 
 export default {
   name: 'Coaches',
-  components: { CoachItem, CoachFilter },
+  components: {CoachItem, CoachFilter},
   computed: {
     filteredCoaches() {
       const coaches = this.allCoaches;
@@ -47,8 +47,9 @@ export default {
 
       });
     },
-    ...mapGetters('coachesModule', { hasCoaches: 'hasCoaches', allCoaches: 'coaches', isCoach: 'isCoach' })
+    ...mapGetters('coachesModule', {hasCoaches: 'hasCoaches', allCoaches: 'coaches', isCoach: 'isCoach'})
   },
+
   data() {
     return {
       activeFilters: {
@@ -61,7 +62,11 @@ export default {
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
-    }
+    },
+    ...mapActions('coachesModule', {loadCoaches: 'loadCoaches'}),
+  },
+  created(){
+    this.loadCoaches();
   }
 };
 </script>
