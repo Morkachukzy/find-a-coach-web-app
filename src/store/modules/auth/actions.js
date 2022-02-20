@@ -1,3 +1,4 @@
+let timer;
 const actions = {
     async login(context, payload) {
         await context.dispatch('postData', {...payload, action: 'login'});
@@ -25,19 +26,54 @@ const actions = {
             throw new Error(responseData.message || `Failed to validate`);
         }
         console.log(responseData);
+
+        const expiresIn = +responseData.expiresIn * 1000;
+        const expirationDate = new Date().getTime() + expiresIn;
+
+        localStorage.setItem('token', responseData.token);
+        localStorage.setItem('userId', responseData.localId);
+        localStorage.setItem('tokenExpiration', expirationDate)
+        timer = setTimeout(() => {
+            context.dispatch('autoLogOut');
+        }, expiresIn)
         context.commit('SET_USER', {
             token: responseData.idToken,
             userId: responseData.localId,
-            tokenExpiration: responseData.expiresIn
         })
     },
+    autoLogin(context){
+       const token =  localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        const tokenExpiration = localStorage.getItem('tokenExpiration');
+
+        const expiresIn = +tokenExpiration - new Date().getTime();
+        if (expiresIn < 0){
+            return;
+        }
+        timer = setTimeout(() => {
+            context.dispatch('autoLogOut');
+        }, expiresIn)
+        if(token && userId){
+            context.commit('SET_USER', {
+                token,
+                userId,
+
+            })
+        }
+    },
     logOut(context) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('tokenExpiration');
+        clearTimeout(timer);
         context.commit('SET_USER', {
             token: null,
             userId: null,
-            tokenExpiration: null,
         })
-
+    },
+    autoLogOut(context){
+        context.dispatch('logOut');
+        context.commit('SET_AUTO_LOGOUT');
     }
 }
 
