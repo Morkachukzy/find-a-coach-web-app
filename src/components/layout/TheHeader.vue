@@ -8,8 +8,14 @@
         <li>
           <base-button link to='/coaches'>All Coaches</base-button>
         </li>
-        <li>
+        <li v-if="isLoggedIn">
           <base-button link to='/requests'>Requests</base-button>
+        </li>
+        <li v-else>
+          <base-button link to='/auth'>Login</base-button>
+        </li>
+        <li v-if="isLoggedIn">
+          <base-button @click="logOut">Logout</base-button>
         </li>
       </ul>
     </nav>
@@ -17,8 +23,23 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
-  name: 'TheHeader'
+  name: 'TheHeader',
+  computed: {
+    isLoggedIn() {
+      return this.isAuthenticated;
+    },
+    ...mapGetters(['isAuthenticated'])
+  },
+  methods: {
+    logOut() {
+      this.logOff();
+      this.$router.replace('/coaches');
+    },
+    ...mapActions({logOff: 'logOut'})
+
+  },
 };
 </script>
 

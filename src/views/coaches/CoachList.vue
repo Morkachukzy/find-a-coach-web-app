@@ -1,14 +1,15 @@
 <template>
   <div>
-      <base-dialog :show="!!error" title="An error occurred" @close="handleError">
-        <p>{{ error }}</p>
-      </base-dialog>
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
 
     <coach-filter @change-filter='setFilters'></coach-filter>
     <base-card>
       <div class='controls'>
         <base-button mode='outline' @click="loadCoaches(true)">Refresh</base-button>
-        <base-button link to='/register' v-if='!isCoach && !isLoading'>Register as a Coach</base-button>
+        <base-button link to="/auth?redirect=register" v-if="!isLoggedIn">Login to Register as a Coach</base-button>
+        <base-button link to='/register' v-if='showRegisterAsACoach'>Register as a Coach</base-button>
       </div>
       <div v-if="isLoading">
         <base-spinner></base-spinner>
@@ -40,6 +41,9 @@ export default {
   name: 'Coaches',
   components: {CoachItem, CoachFilter},
   computed: {
+    isLoggedIn() {
+      return this.isAuthenticated;
+    },
     filteredCoaches() {
       const coaches = this.allCoaches;
       return coaches.filter(coach => {
@@ -54,7 +58,11 @@ export default {
 
       });
     },
-    ...mapGetters('coachesModule', {hasCoaches: 'hasCoaches', allCoaches: 'coaches', isCoach: 'isCoach'})
+    showRegisterAsACoach() {
+      return this.isLoggedIn && !this.isCoach && !this.isLoading;
+    },
+    ...mapGetters('coachesModule', {hasCoaches: 'hasCoaches', allCoaches: 'coaches', isCoach: 'isCoach'}),
+    ...mapGetters(['isAuthenticated']),
   },
 
   data() {
